@@ -5,9 +5,14 @@
         /** @var \App\Models\BlogCategory $item */
     @endphp
 
-    <form method="post" action="{{ route('blog.admin.categories.update', $item->id) }}" >
+    @if($item->exists)
+        <form method="post" action="{{ route('blog.admin.categories.update', $item->id) }}" >
         @method('PATCH')
+    @else
+        <form method="post" action="{{ route('blog.admin.categories.store'}}" >
+    @endif
         @csrf
+
         <div class="container">
             @php
                 /** @var \Illuminate\Support\ViewErrorBag $errors */
@@ -19,7 +24,7 @@
                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                <span aria-hidden="true"></span>
                            </button>
-                           {!! dd($errors->all(':message')) !!}
+                           {{ $errors->first() }}
                        </div>
                     </div>
                 </div>
@@ -32,7 +37,7 @@
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true"></span>
                             </button>
-                            {{ session()->get('success') }}
+                            {{ session()->get('success', 'Выполнено успешно!') }}
                         </div>
                     </div>
                 </div>
