@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Blog\Admin;
 use App\Http\Requests\BlogCategoryCreateRequest;
 use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\BlogCategory;
-use Illuminate\Http\Request;
+use App\Repositories\BlogCategoryRepository;
 use Illuminate\Support\Str;
 
 class CategoryController extends BaseController
@@ -44,12 +44,15 @@ class CategoryController extends BaseController
     public function store(BlogCategoryCreateRequest $request)
     {
        $data = $request->input();
+
        if (empty($data['slug'])) {
            $data['slug'] = Str::slug($data['title']);
        }
 
-       $item = new BlogCategory($data);
-       $item->save();
+       /*$item = new BlogCategory($data);
+       $item->save();*/
+
+        $item =(new BlogCategory())->create($data);
 
         if ($item) {
             return redirect()
@@ -70,10 +73,13 @@ class CategoryController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, BlogCategoryRepository $categoryRepository)
     {
-        $item = BlogCategory::findOrFail($id);
-        $categoryList = BlogCategory::all();
+        /*$item = BlogCategory::findOrFail($id);
+        $categoryList = BlogCategory::all();*/
+
+        $item = $categoryRepository->getEdit($id);
+        $categoryList = $categoryRepository->getForComboBox();
 
         return view('blog.admin.categories.edit', compact('item', 'categoryList'));
     }
@@ -96,7 +102,11 @@ class CategoryController extends BaseController
         }
 
         $data = $request->all();
-        $result = $item->fill($data)->save();
+        if (empty($data['slug'])) {
+            $data['slug'] = Str::slug($data['title']);
+        }
+
+        $result = $item->update($data);
 
         if ($result) {
             return redirect()
