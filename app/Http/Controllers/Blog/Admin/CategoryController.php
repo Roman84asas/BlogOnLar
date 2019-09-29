@@ -6,7 +6,6 @@ use App\Http\Requests\BlogCategoryCreateRequest;
 use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\BlogCategory;
 use App\Repositories\BlogCategoryRepository;
-use Illuminate\Support\Str;
 
 class CategoryController extends BaseController
 {
@@ -55,21 +54,17 @@ class CategoryController extends BaseController
     {
        $data = $request->input();
 
-       if (empty($data['slug'])) {
-           $data['slug'] = Str::slug($data['title']);
-       }
+       $item =(new BlogCategory())->create($data);
 
-        $item =(new BlogCategory())->create($data);
-
-        if ($item) {
+       if ($item) {
             return redirect()
                 ->route('blog.admin.categories.edit', $item->id)
                 ->with(['success' => 'Успешно сохранено']);
-        } else {
+       } else {
             return back()
                 ->withErrors(['msg' => 'Ошибка сохранения'])
                 ->withInput();
-        }
+       }
     }
 
 
@@ -110,9 +105,7 @@ class CategoryController extends BaseController
         }
 
         $data = $request->all();
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['title']);
-        }
+
 
         $result = $item->update($data);
 
