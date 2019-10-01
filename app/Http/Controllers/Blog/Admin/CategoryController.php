@@ -7,6 +7,10 @@ use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\BlogCategory;
 use App\Repositories\BlogCategoryRepository;
 
+/**
+ * Class CategoryController
+ * @package App\Http\Controllers\Blog\Admin
+ */
 class CategoryController extends BaseController
 {
 
@@ -47,7 +51,6 @@ class CategoryController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(BlogCategoryCreateRequest $request)
@@ -67,22 +70,23 @@ class CategoryController extends BaseController
        }
     }
 
-
-
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {
-        $item = $this->blogCategoryRepository->getEdit($id);
+        $item = $this
+            ->blogCategoryRepository
+            ->getEdit($id);
+
         if (empty($item)){
             abort(404);
         }
 
-        $categoryList = $this->blogCategoryRepository->getForComboBox();
+        $categoryList = $this
+            ->blogCategoryRepository
+            ->getForComboBox();
 
         return view('blog.admin.categories.edit', compact('item', 'categoryList'));
     }
@@ -90,8 +94,8 @@ class CategoryController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param BlogCategoryUpdateRequest $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(BlogCategoryUpdateRequest $request, $id)

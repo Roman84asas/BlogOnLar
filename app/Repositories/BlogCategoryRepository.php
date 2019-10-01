@@ -28,8 +28,9 @@ class BlogCategoryRepository extends CoreRepository
     }
 
     /**
-     * @return Collection
+     * @return array
      */
+
     public function getForComboBox()
     {
         $columns = implode(',', [
@@ -59,7 +60,11 @@ class BlogCategoryRepository extends CoreRepository
             'parent_id',
         ];
 
-        $result = $this->startConditions()->select($columns)->paginate($perPage);
+        $result = $this
+            ->startConditions()
+            ->select($columns)
+            ->with(['parentCategory:id,title',])
+            ->paginate($perPage);
 
         return $result;
     }

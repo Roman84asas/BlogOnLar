@@ -9,7 +9,11 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true"></span>
                 </button>
-                {{ $errors->first() }}
+                <ul>
+                    @foreach($errors->all() as $errorText)
+                        <li>{{ $errorText }}</li>
+                    @endforeach
+                </ul>
             </div>
         </div>
     </div>
@@ -22,7 +26,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true"></span>
                 </button>
-                {{ session()->get('success', 'Выполнено успешно!') }}
+                {{ session()->get('success') }}
             </div>
         </div>
     </div>
