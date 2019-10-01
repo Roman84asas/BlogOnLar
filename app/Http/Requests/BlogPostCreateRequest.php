@@ -32,4 +32,19 @@ class BlogPostCreateRequest extends FormRequest
             'category_id' => 'required|integer|exists:blog_categories,id',
         ];
     }
+
+    public function message()
+    {
+        return [
+            'title.required'  => 'Введите заголовок статьи',
+            'content_raw.min' => 'Минимальная длина статьи [:min] символов',
+        ];
+    }
+
+    public function attributes()
+    {
+       return [
+           'title' => 'Заголовок',
+       ];
+    }
 }

@@ -15,4 +15,16 @@ class BlogCategory extends Model
         'parent_id',
         'description',
     ];
+
+    public function parentCategory()
+    {
+        return $this->belongsTo(BlogCategory::class, 'parent_id', 'id');
+    }
+
+    public function getParentTitleAttribute()
+    {
+        $title = $this->parentCategory->title ?? ($this->isRoot() ? 'Корень' : '???');
+
+        return $title;
+    }
 }
